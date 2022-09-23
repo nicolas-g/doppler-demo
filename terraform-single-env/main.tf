@@ -11,18 +11,23 @@ terraform {
 }
 
 # Define a variable so we can pass in our token
-variable "DOPPLER_TOKEN" {
+variable "doppler_token" {
+  # export TF_VAR_doppler_token=dp.pt.XYZ
+  description = "The Dooppler token to authenticate"
   type        = string
-  description = "A token to authenticate with Doppler"
 }
 
 # Configure the Doppler provider with the token
 provider "doppler" {
-  doppler_token = var.DOPPLER_TOKEN
+  # Configuration options
+  doppler_token = var.doppler_token
 }
 
 # Define our data source to fetch secrets
-data "doppler_secrets" "this" {}
+data "doppler_secrets" "this" {
+  project = "demo"
+  config  = "dev"
+}
 
 # Access individual secrets
 output "my_secret" {
