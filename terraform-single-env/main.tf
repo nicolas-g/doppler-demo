@@ -32,5 +32,5 @@ data "doppler_secrets" "this" {
 # Access individual secrets
 output "my_secret" {
   # nonsensitive used for demo purposes only
-  value = nonsensitive(data.doppler_secrets.this.map.HELLO_SECRET)
+  value = nonsensitive(data.doppler_secrets.this.map.DEMO_SECRET)
 }
