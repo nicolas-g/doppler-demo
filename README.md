@@ -17,11 +17,22 @@ doppler secrets upload dev.env
 doppler secrets set HELL_PORT '8888'
 ```
 
-create a branch by clocking on the `+` symbol
+Create a branch by clocking on the `+` symbol
 
 ## Python
+
+### Without Doppler
 ```
-doppler run -- python hello.py
+source dev.env
+python demo.py
+
+source prod.env
+python demo.py
+```
+
+### With Doppler
+```
+doppler run -- python demo.py
 ```
 
 ## Terraform
@@ -30,6 +41,19 @@ doppler configs tokens create --project demo --config dev ngmac --plain
 export TF_VAR_DOPPLER_TOKEN='$(doppler configs tokens create --project demo --config dev ngmac --plain)'
 
 export TF_VAR_DOPPLER_TOKEN='dp.st.dev.XYZ'
+```
+
+### Run Terraform without any code changes
+
+```
+cd terraform-pull-secret-no-provider
+doppler run --name-transformer tf-var -- terraform plan
+```
+
+### Run Terraform using provider
+```
+cd terraform-pull-secret-with-provider
+terraform plan
 ```
 
 ## Kubernetes
@@ -45,12 +69,12 @@ K8S_DOPPLER_TOKEN=$(doppler configs tokens create doppler-kubernetes-operator --
 kubectl create secret generic doppler-token-secret --namespace doppler-operator-system --from-literal=serviceToken=$K8S_DOPPLER_TOKEN
 ```
 
-create DopplerSecret
+Create DopplerSecret
 ```
 kubectl apply -f DopplerSecret.yaml
 ```
 
-Apply Deployment and use the secert
+Apply Deployment and use the secret
 ```
 kubectl apply -f deployment_envFrom.yaml
 ```
